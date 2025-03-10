@@ -1,70 +1,97 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Voici le cahier des charges du projet avec ses fonctionnalités principales :
+Cahier des Charges - SARA (Smart Adaptive Review Assistant)
+1. Description Générale
+SARA est une application web d'apprentissage adaptatif qui guide les utilisateurs à travers des parcours pédagogiques personnalisés.
+2. Types d'Activités
+2.1 Activités de Cours
+Fiche de Révision (revision_sheet)
+Sections de contenu théorique
+Sous-sections détaillées
+Exemples pratiques
+Remarques importantes
+Questions de compréhension
+Carte Mentale (mind_map)
+Représentation visuelle des concepts
+Liens entre les notions
+Navigation interactive
+Questions intégrées
+Vidéo de Révision (revision_sheet_video)
+Support vidéo pédagogique
+Questions de compréhension
+Transcription interactive
+2.2 Activités d'Évaluation
+Vrai/Faux (true_false)
+Question simple
+Choix binaire
+Explication détaillée
+Feedback immédiat
+Questions à Choix Multiples (multiple_choice)
+Question avec plusieurs options
+Une ou plusieurs réponses correctes
+Explications pour chaque option
+Feedback détaillé
+Texte à Trous (fill_in_the_blank)
+Texte avec espaces à compléter
+Validation des réponses
+Indices disponibles
+Explications des réponses
+Questions Ouvertes (open_ended)
+Questions de réflexion
+Réponses libres
+Mots-clés de validation
+Feedback personnalisé
+3. Système de Progression
+3.1 Compétences
+Suivi des compétences par domaine
+Progression dynamique
+Impact des activités sur les compétences
+Visualisation des progrès
+3.2 Parcours
+Structure modulaire
+Progression adaptative
+Prérequis et dépendances
+Chemins d'apprentissage personnalisés
+4. Interface Utilisateur
+4.1 Navigation
+Interface intuitive
+Mode desktop et mobile
+Barre de progression
+Menu de navigation
+4.2 Interaction
+Feedback immédiat
+Messages d'encouragement
+Aide contextuelle
+Historique des activités
+5. Fonctionnalités Techniques
+5.1 Adaptabilité
+Adaptation au niveau de l'utilisateur
+Recommandations personnalisées
+Répétition espacée
+Analyse des performances
+5.2 Sauvegarde et Suivi
+Sauvegarde de la progression
+Historique des résultats
+Statistiques d'apprentissage
+Export des données
+6. Extensions Futures
+Mode Hors-ligne
+Multi-langues
+Collaboration entre apprenants
+Création de parcours personnalisés
+Intégration d'exercices interactifs
+Système de badges et récompenses
+API pour contenus externes
+Analytics avancés
+7. Aspects Techniques
+Application React
+Architecture modulaire
+Gestion d'état centralisée
+Interface responsive
+Tests automatisés
+Documentation complète
+8. Sécurité et Performance
+Authentification sécurisée
+Protection des données
+Optimisation des performances
+Sauvegarde régulière
+Ce cahier des charges définit les fonctionnalités essentielles et les extensions futures du projet SARA, permettant un développement structuré et évolutif.
