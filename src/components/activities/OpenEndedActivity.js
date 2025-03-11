@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   Box, 
   Typography, 
@@ -11,11 +11,15 @@ import {
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import VirtualKeyboard from '../VirtualKeyboard';
 
 const OpenEndedActivity = ({ content, onComplete }) => {
   const [answer, setAnswer] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [result, setResult] = useState(null);
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
+  const inputRef = useRef(null);
 
   const checkAnswer = (userAnswer) => {
     const keywords = content.answer.toLowerCase().split(' ');
@@ -33,6 +37,19 @@ const OpenEndedActivity = ({ content, onComplete }) => {
         !userWords.some(word => word.includes(keyword))
       )
     };
+  };
+
+  const handleKeyPress = (button) => {
+    if (isSubmitted) return;
+    
+    if (button === '{bksp}') {
+      setAnswer(prev => prev.slice(0, -1));
+    } else {
+      setAnswer(prev => prev + button);
+    }
+    
+    inputRef.current?.focus();
+    setIsInputFocused(true);
   };
 
   const handleSubmit = () => {
@@ -68,11 +85,16 @@ const OpenEndedActivity = ({ content, onComplete }) => {
     };
 
     setIsSubmitted(true);
+    setIsKeyboardOpen(false); // Fermer le clavier à la validation
     onComplete?.(finalResult);
   };
 
+  const toggleKeyboard = () => {
+    setIsKeyboardOpen(!isKeyboardOpen);
+  };
+
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 3, pb: 20, position: 'relative' }}>
       <Typography variant="h6" gutterBottom>
         {content.question}
       </Typography>
@@ -85,6 +107,8 @@ const OpenEndedActivity = ({ content, onComplete }) => {
         onChange={(e) => !isSubmitted && setAnswer(e.target.value)}
         disabled={isSubmitted}
         placeholder="Écrivez votre réponse ici..."
+        inputRef={inputRef}
+        onFocus={() => setIsInputFocused(true)}
         sx={{ 
           mt: 2,
           mb: 3,
@@ -140,9 +164,17 @@ const OpenEndedActivity = ({ content, onComplete }) => {
         variant="contained"
         onClick={handleSubmit}
         disabled={!answer.trim() || isSubmitted}
+        tabIndex={-1}
       >
         Valider
       </Button>
+
+      <VirtualKeyboard 
+        onKeyPress={handleKeyPress}
+        activeInput={isInputFocused}
+        isOpen={isKeyboardOpen}
+        onToggle={toggleKeyboard}
+      />
     </Box>
   );
 };

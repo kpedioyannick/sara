@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   Box, 
   Typography, 
@@ -8,10 +8,14 @@ import {
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import VirtualKeyboard from '../VirtualKeyboard';
 
 const FillInTheBlankActivity = ({ content, onComplete }) => {
   const [userAnswers, setUserAnswers] = useState(Array(content.answers.length).fill(''));
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [activeInputIndex, setActiveInputIndex] = useState(null);
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const inputRefs = useRef([]);
 
   const handleAnswerChange = (index, value) => {
     if (isSubmitted) return;
@@ -19,6 +23,24 @@ const FillInTheBlankActivity = ({ content, onComplete }) => {
     const newAnswers = [...userAnswers];
     newAnswers[index] = value;
     setUserAnswers(newAnswers);
+  };
+
+  const handleKeyPress = (button) => {
+    if (activeInputIndex === null || isSubmitted) return;
+    
+    const currentAnswer = userAnswers[activeInputIndex] || '';
+    
+    if (button === '{bksp}') {
+      handleAnswerChange(activeInputIndex, currentAnswer.slice(0, -1));
+    } else {
+      handleAnswerChange(activeInputIndex, currentAnswer + button);
+    }
+    
+    inputRefs.current[activeInputIndex]?.focus();
+  };
+
+  const toggleKeyboard = () => {
+    setIsKeyboardOpen(!isKeyboardOpen);
   };
 
   const handleSubmit = () => {
@@ -59,6 +81,7 @@ const FillInTheBlankActivity = ({ content, onComplete }) => {
     };
 
     setIsSubmitted(true);
+    setIsKeyboardOpen(false);
     onComplete?.(result);
   };
 
@@ -69,8 +92,9 @@ const FillInTheBlankActivity = ({ content, onComplete }) => {
     return (
       <Stack direction="row" spacing={1} alignItems="center">
         <TextField
+          inputRef={el => inputRefs.current[index] = el}
           size="small"
-          value={userAnswers[index]}
+          value={userAnswers[index] || ''}
           onChange={(e) => handleAnswerChange(index, e.target.value)}
           disabled={isSubmitted}
           error={isSubmitted && !isCorrect}
@@ -82,6 +106,7 @@ const FillInTheBlankActivity = ({ content, onComplete }) => {
               ) : 'background.paper'
             }
           }}
+          onFocus={() => setActiveInputIndex(index)}
         />
         {isSubmitted && (
           isCorrect ? 
@@ -98,7 +123,7 @@ const FillInTheBlankActivity = ({ content, onComplete }) => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 3, pb: 20, position: 'relative' }}>
       <Stack spacing={3}>
         {content.text.map((textPart, index) => (
           <Box key={index}>
@@ -114,10 +139,18 @@ const FillInTheBlankActivity = ({ content, onComplete }) => {
           variant="contained"
           onClick={handleSubmit}
           disabled={userAnswers.some(answer => !answer) || isSubmitted}
+          tabIndex={-1}
         >
           Valider
         </Button>
       </Stack>
+      
+      <VirtualKeyboard 
+        onKeyPress={handleKeyPress}
+        activeInput={activeInputIndex}
+        isOpen={isKeyboardOpen}
+        onToggle={toggleKeyboard}
+      />
     </Box>
   );
 };
