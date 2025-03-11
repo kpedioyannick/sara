@@ -26,6 +26,10 @@ const ChatContainer = () => {
   const [isExchangeActive, setIsExchangeActive] = useState(false);
   const [activityUpdated, setActivityUpdated] = useState(false);
   const [isExchangeExpanded, setIsExchangeExpanded] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(null);
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [questions, setQuestions] = useState([]);
+  const [currentExplanation, setCurrentExplanation] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const lastMessageRef = useRef(null);
@@ -116,34 +120,41 @@ const ChatContainer = () => {
   const handleNeedHelp = async () => {
     setWaitingForUnderstanding(false);
     setMessages(prev => [...prev, {
-      text: "Je vais vous donner plus de détails pour vous aider à comprendre...",
+      text: "Je vais vous guider étape par étape pour comprendre ce concept.",
       isSara: true
     }]);
 
     try {
       const explanation = await api.getDetailedExplanation(currentActivity.id);
-      
-      // Ajouter les explications détaillées dans plusieurs messages
-      setMessages(prev => [
-        ...prev,
+      // Stocker l'explication pour l'utiliser plus tard
+      setCurrentExplanation(explanation);
+      // Démarrer avec la première étape
+      handleExplanationStep(0, explanation);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des explications:', error);
+      setWaitingForUnderstanding(true);
+      setMessages(prev => [...prev, {
+        text: "Désolé, je n'ai pas pu récupérer les explications détaillées.",
+        isSara: true,
+        showUnderstandingButtons: true
+      }]);
+    }
+  };
+
+  const handleExplanationStep = (currentStep, explanation) => {
+    if (!explanation?.steps || currentStep >= explanation.steps.length) {
+      // Fin des étapes
+      setMessages(prev => [...prev, 
         {
-          text: `📚 Concept : ${explanation.concept}`,
+          text: "🎉 Excellent ! Vous avez complété toutes les étapes !",
           isSara: true
         },
         {
-          text: explanation.detailedExplanation,
+          text: explanation.finalExplanation || "",
           isSara: true
         },
         {
-          text: "Voici quelques exemples :",
-          isSara: true
-        },
-        {
-          text: explanation.examples.join('\n'),
-          isSara: true
-        },
-        {
-          text: explanation.visualAid,
+          text: explanation.visualAid || "",
           isSara: true
         },
         {
@@ -152,14 +163,60 @@ const ChatContainer = () => {
           showUnderstandingButtons: true
         }
       ]);
-      
       setWaitingForUnderstanding(true);
-    } catch (error) {
-      console.error('Erreur lors de la récupération des explications:', error);
-      setMessages(prev => [...prev, {
-        text: "Désolé, je n'ai pas pu récupérer les explications détaillées.",
+      return;
+    }
+
+    const step = explanation.steps[currentStep];
+    const stepMessages = [
+      {
+        text: `📝 Étape ${step.step || currentStep + 1}`,
         isSara: true
-      }]);
+      },
+      {
+        text: step.instruction,
+        isSara: true
+      },
+      {
+        text: `💡 Conseil : ${step.hint}`,
+        isSara: true
+      },
+      {
+        text: step.question.text,
+        isSara: true,
+        options: step.question.options,
+        isExplanationStep: true,
+        currentStep,
+        explanation // Passer l'explication complète
+      }
+    ];
+
+    setMessages(prev => [...prev, ...stepMessages]);
+  };
+
+  const handleAnswer = (answer, message) => {
+    if (message.isExplanationStep) {
+      const step = message.explanation.steps[message.currentStep];
+      const isCorrect = step.question.options.find(opt => opt.text === answer)?.is_correct;
+      
+      setMessages(prev => [...prev, 
+        {
+          text: answer,
+          isSara: false
+        },
+        {
+          text: isCorrect 
+            ? "✅ Correct ! Passons à l'étape suivante." 
+            : "❌ Ce n'est pas tout à fait ça. Essayez de nouveau.",
+          isSara: true
+        }
+      ]);
+
+      if (isCorrect) {
+        handleExplanationStep(message.currentStep + 1, message.explanation);
+      }
+    } else {
+      handleQuestionAnswer(answer);
     }
   };
 
@@ -170,47 +227,59 @@ const ChatContainer = () => {
   };
 
   const handleActivityCompletion = (result) => {
+    console.log("Activity completion result:", result);
     setCurrentResult(result);
-    setLastAnswer(result.answer);
+    
+    if ((result.type === 'revision_sheet' || result.type === 'revision_sheet_video') && result.questions) {
+      console.log("Processing revision sheet questions:", result.questions);
+      
+      // Stocker les questions pour les poser plus tard
+      setQuestions(result.questions);
+      setQuestionIndex(0);
+      setCurrentQuestion(result.questions[0]);
 
-    // Mettre à jour les résultats du parcours avec l'ID de l'activité
-    setPathResults(prev => [
-      ...prev,
-      {
-        activityId: currentActivity.id,
-        isCorrect: result.isCorrect,
-        answer: result.answer,
-        skillsImpact: currentActivity.skillsImpact
+      // Ajouter le message initial et la première question immédiatement
+      const newMessages = [
+        {
+          text: "Maintenant, vérifions votre compréhension avec quelques questions.",
+          isSara: true
+        },
+        {
+          text: result.questions[0].question,
+          isSara: true,
+          options: result.questions[0].options
+        }
+      ];
+
+      console.log("Adding new messages:", newMessages);
+      setMessages(prev => [...prev, ...newMessages]);
+      
+    } else {
+      // Traitement normal pour les autres types d'activités
+      const orderedMessages = [];
+
+      if (result.messages && result.messages.length > 0) {
+        orderedMessages.push({
+          ...result.messages[0],
+          activityId: currentActivity.id
+        });
       }
-    ]);
 
-    // Organiser les messages dans le bon ordre
-    const orderedMessages = [];
+      // 2. Messages d'explication
+      const explanations = result.messages?.filter(m => m.type === 'explanation') || [];
+      orderedMessages.push(...explanations);
 
-    // 1. Message de résultat (correct/incorrect)
-    if (result.messages && result.messages.length > 0) {
-      orderedMessages.push({
-        ...result.messages[0],
-        activityId: currentActivity.id  // Ajouter l'ID de l'activité au message
-      });
-    }
+      // 3. Messages de correction
+      const corrections = result.messages?.filter(m => m.type === 'correction') || [];
+      orderedMessages.push(...corrections);
 
-    // 2. Messages d'explication
-    const explanations = result.messages?.filter(m => m.type === 'explanation') || [];
-    orderedMessages.push(...explanations);
+      // 4. Autres messages
+      const otherMessages = result.messages?.filter(m => 
+        !m.type && m !== result.messages[0]
+      ) || [];
+      orderedMessages.push(...otherMessages);
 
-    // 3. Messages de correction
-    const corrections = result.messages?.filter(m => m.type === 'correction') || [];
-    orderedMessages.push(...corrections);
-
-    // 4. Autres messages
-    const otherMessages = result.messages?.filter(m => 
-      !m.type && m !== result.messages[0]
-    ) || [];
-    orderedMessages.push(...otherMessages);
-
-    // 5. Ajouter le message de compréhension uniquement si la réponse est incorrecte
-    if (!result.isCorrect) {
+      // 5. Ajouter le message de compréhension uniquement si la réponse est incorrecte
       const understandingMessage = {
         text: "Avez-vous compris pourquoi ce n'était pas la bonne réponse ?",
         isSara: true,
@@ -218,15 +287,76 @@ const ChatContainer = () => {
       };
       orderedMessages.push(understandingMessage);
       setWaitingForUnderstanding(true);
+
+      setMessages(prev => [...prev, ...orderedMessages]);
     }
 
-    // Mettre à jour les messages
-    setMessages(prev => [...prev, ...orderedMessages]);
-
-    // Si la réponse est correcte, mettre à jour les compétences et passer à la suite
+    // Si la réponse est correcte, mettre à jour les compétences
     if (result.isCorrect && currentActivity?.skillsImpact) {
       updateSkills(currentActivity.skillsImpact);
-      proceedToNextActivity();
+    }
+
+      // Mettre à jour les résultats du parcours pour toutes les activités
+    if (result.isCorrect !== undefined) {
+      setPathResults(prev => [
+        ...prev,
+        {
+          activityId: currentActivity.id,
+          isCorrect: result.isCorrect,
+          answer: result.answer,
+          skillsImpact: currentActivity.skillsImpact
+        }
+      ]);
+    }
+  };
+
+  const handleQuestionAnswer = (answer) => {
+    const question = questions[questionIndex];
+    const isCorrect = question.options.find(opt => opt.text === answer)?.is_correct;
+
+    // Ajouter la réponse aux messages
+    setMessages(prev => [
+      ...prev,
+      { text: answer, isSara: false },
+      {
+        text: isCorrect ? 
+          "Correct ! " + question.explanation.steps[0].detail :
+          "Incorrect. " + question.explanation.steps[0].detail,
+        isSara: true
+      }
+    ]);
+
+    // Passer à la question suivante ou terminer
+    if (questionIndex < questions.length - 1) {
+      setQuestionIndex(prev => prev + 1);
+      setCurrentQuestion(questions[questionIndex + 1]);
+      
+      // Ajouter la question suivante aux messages
+      setMessages(prev => [...prev, {
+        text: questions[questionIndex + 1].question,
+        isSara: true,
+        options: questions[questionIndex + 1].options
+      }]);
+    } else {
+        // Mettre à jour les résultats du parcours
+        setPathResults(prev => [
+          ...prev,
+          {
+            activityId: currentActivity.id,
+            isCorrect: isCorrect,
+            answer: answer,
+            skillsImpact: currentActivity.skillsImpact
+          }
+        ]);
+
+      setMessages(prev => [...prev, {
+        text: "Bravo ! Vous avez terminé toutes les questions de révision !",
+        isSara: true,
+        showUnderstandingButtons: true
+      }]);
+      setWaitingForUnderstanding(true);
+      setQuestions([]);
+      setCurrentQuestion(null);
     }
   };
 
@@ -236,7 +366,9 @@ const ChatContainer = () => {
     const activityType = {
       'multiple_choice': 'QCM',
       'true_false': 'Vrai/Faux',
-      'fill_in_the_blank': 'À compléter',
+      'fill_in_the_blank': 'Texte à compléter',
+      'revision_sheet_video': 'Vidéo de révision',
+      'revision_sheet': 'Fiches de révision',
       'open_ended': 'Question ouverte'
     }[activity.type] || 'Activité';
 
@@ -285,6 +417,8 @@ const ChatContainer = () => {
   };
 
   const renderMessage = (msg, index) => {
+    console.log("Rendering message:", msg);
+    
     if (msg.showUnderstandingButtons && waitingForUnderstanding) {
       return (
         <Box key={index}>
@@ -324,6 +458,26 @@ const ChatContainer = () => {
             path={currentPath}
             results={pathResults}
           />
+        </Box>
+      );
+    }
+
+    if (msg.options) {
+      console.log("Rendering message with options");
+      return (
+        <Box key={index}>
+          <Message {...msg} />
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2 }}>
+            {msg.options.map((option, i) => (
+              <Button
+                key={i}
+                variant="outlined"
+                onClick={() => handleAnswer(option.text, msg)}
+              >
+                {option.text}
+              </Button>
+            ))}
+          </Box>
         </Box>
       );
     }

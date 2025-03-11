@@ -19,9 +19,9 @@ const ActivityRenderer = ({ activity, onComplete }) => {
     case 'open_ended':
       return <OpenEndedActivity content={activity.content} onComplete={onComplete} />;
     case 'revision_sheet':
-      return <RevisionSheet content={activity.content} />;
+      return <RevisionSheet content={activity.content} onComplete={onComplete} />;
     case 'revision_sheet_video':
-      return <RevisionSheetVideo content={activity.content} />;
+      return <RevisionSheetVideo content={activity.content} onComplete={onComplete} />;
     default:
       return <div>Type d'activité non supporté: {activity.type}</div>;
   }

@@ -3,11 +3,32 @@ import {
   Box, 
   Paper, 
   Typography,
-  Divider
+  Button
 } from '@mui/material';
 
-const RevisionSheet = ({ content }) => {
+const RevisionSheet = ({ content, onComplete }) => {
+  const handleComplete = () => {
+    console.log("handleComplete");
+    // Extraire les questions de la section de type "question"
+    const questionSection = content.find(item => item.type === "question");
+    const questions = questionSection?.questions || [];
+    
+    onComplete?.({
+      type: 'revision_sheet',
+      isComplete: true,
+      questions: questions,
+      messages: [{
+        text: "Maintenant, vérifions votre compréhension avec quelques questions.",
+        isSara: true,
+        startQuestions: true, // Flag pour démarrer les questions
+        questions: questions
+      }]
+    });
+  };
+
   const renderSection = (item, index) => {
+    if (item.type === "question") return null; // Ne pas afficher la section questions
+
     switch (item.type) {
       case 'section':
         return (
@@ -65,6 +86,15 @@ const RevisionSheet = ({ content }) => {
   return (
     <Paper sx={{ p: 3, maxWidth: '800px', mx: 'auto' }}>
       {content.map((item, index) => renderSection(item, index))}
+      <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
+        <Button 
+          variant="contained" 
+          color="primary"
+          onClick={handleComplete}
+        >
+          Terminer la révision
+        </Button>
+      </Box>
     </Paper>
   );
 };
