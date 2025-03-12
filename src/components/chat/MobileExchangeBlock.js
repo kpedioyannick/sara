@@ -8,66 +8,31 @@ const MobileExchangeBlock = ({
   onStateChange 
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [startY, setStartY] = useState(null);
   const blockRef = useRef(null);
   const lastActivityUpdate = useRef(Date.now());
   const lastExpansion = useRef(Date.now());
 
-  // Gérer l'expansion automatique lors de nouveaux messages
   useEffect(() => {
     if (isActive) {
       const now = Date.now();
-      if (now - lastExpansion.current > 500) { // Éviter les expansions trop fréquentes
+      if (now - lastExpansion.current > 500) {
         setIsExpanded(true);
-        onStateChange(true);
+        onStateChange?.(true);
         lastExpansion.current = now;
       }
     }
   }, [isActive, onStateChange]);
 
-  // Gérer le pliage automatique lors de la mise à jour de l'activité
   useEffect(() => {
     if (activityUpdated) {
       const now = Date.now();
-      if (now - lastActivityUpdate.current > 500 && isExpanded) { // Vérifier si déplié et éviter les replis trop fréquents
+      if (now - lastActivityUpdate.current > 500 && isExpanded) {
         setIsExpanded(false);
-        onStateChange(false);
+        onStateChange?.(false);
         lastActivityUpdate.current = now;
       }
     }
-  }, [activityUpdated, isExpanded, onStateChange]);
-
-  const handleTouchStart = (e) => {
-    setStartY(e.touches[0].clientY);
-  };
-
-  const handleTouchMove = (e) => {
-    if (!startY) return;
-    
-    const currentY = e.touches[0].clientY;
-    const deltaY = startY - currentY;
-    const windowHeight = window.innerHeight;
-    const threshold = windowHeight * 0.3; // Seuil de 30% pour le changement d'état
-    
-    if (Math.abs(deltaY) > threshold) {
-      const shouldExpand = deltaY > 0;
-      if (shouldExpand !== isExpanded) {
-        setIsExpanded(shouldExpand);
-        onStateChange(shouldExpand);
-      }
-    }
-  };
-
-  const handleTouchEnd = () => {
-    setStartY(null);
-  };
-
-  const toggleExpansion = () => {
-    const newState = !isExpanded;
-    setIsExpanded(newState);
-    onStateChange(newState);
-    lastExpansion.current = Date.now();
-  };
+  }, [activityUpdated, onStateChange, isExpanded]);
 
   return (
     <Box
@@ -77,54 +42,97 @@ const MobileExchangeBlock = ({
         bottom: 0,
         left: 0,
         right: 0,
-        height: isExpanded ? '85%' : '15%',
-        bgcolor: 'background.paper',
-        borderTopLeftRadius: '20px',
-        borderTopRightRadius: '20px',
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-        zIndex: isExpanded ? 1200 : 1000,
-        boxShadow: '0px -2px 10px rgba(0,0,0,0.1)',
+        zIndex: 1000,
+        transform: `translateY(${isExpanded ? '0' : 'calc(100% - 60px)'})`,
+        transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        maxHeight: '85vh',
         display: 'flex',
         flexDirection: 'column',
-        touchAction: 'none', // Empêcher le scroll pendant le glissement
+        bgcolor: '#fff',
+        borderTopLeftRadius: '24px',
+        borderTopRightRadius: '24px',
+        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.15)',
+        animation: 'slideUp 0.3s ease-out',
+        '@keyframes slideUp': {
+          from: { transform: 'translateY(100%)' },
+          to: { transform: 'translateY(0)' }
+        }
       }}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
     >
       <Box
+        onClick={() => {
+          setIsExpanded(!isExpanded);
+          onStateChange?.(!isExpanded);
+        }}
         sx={{
-          width: '100%',
-          height: '24px',
+          py: 2,
+          px: 3,
           display: 'flex',
-          justifyContent: 'center',
           alignItems: 'center',
+          justifyContent: 'space-between',
           cursor: 'pointer',
-          bgcolor: 'background.paper',
-          borderTopLeftRadius: '20px',
-          borderTopRightRadius: '20px',
+          background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+          borderTopLeftRadius: '24px',
+          borderTopRightRadius: '24px',
+          color: '#fff',
+          fontWeight: 600,
+          fontSize: '1rem',
+          boxShadow: '0 4px 12px rgba(5, 150, 105, 0.15)',
           position: 'relative',
           '&::after': {
             content: '""',
             position: 'absolute',
             bottom: 0,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '40px',
-            height: '4px',
-            bgcolor: 'grey.300',
-            borderRadius: '2px',
+            left: 0,
+            right: 0,
+            height: 2,
+            background: 'linear-gradient(90deg, #059669 0%, #10b981 100%)'
           }
         }}
-        onClick={toggleExpansion}
-      />
+      >
+        <Box>Discussion avec Sara</Box>
+        <Box 
+          sx={{ 
+            width: 24, 
+            height: 24, 
+            transform: isExpanded ? 'rotate(180deg)' : 'none',
+            transition: 'transform 0.3s ease',
+            '&::before': {
+              content: '""',
+              display: 'block',
+              width: '10px',
+              height: '10px',
+              borderLeft: '2px solid #fff',
+              borderBottom: '2px solid #fff',
+              transform: 'rotate(-45deg)',
+              margin: '5px'
+            }
+          }} 
+        />
+      </Box>
+
       <Box
         sx={{
           flex: 1,
           overflowY: 'auto',
-          p: 2,
-          opacity: isExpanded ? 1 : 0.8,
-          transition: 'opacity 0.3s ease'
+          p: 3,
+          bgcolor: '#fafafa',
+          backgroundImage: 'radial-gradient(#e8e8e8 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
+          '&::-webkit-scrollbar': {
+            width: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#f1f1f1',
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: '#059669',
+            borderRadius: '4px',
+            '&:hover': {
+              background: '#047857'
+            }
+          },
         }}
       >
         {children}
@@ -133,4 +141,4 @@ const MobileExchangeBlock = ({
   );
 };
 
-export default MobileExchangeBlock; 
+export default MobileExchangeBlock;

@@ -39,13 +39,15 @@ const SkillsRadar = ({ path, results }) => {
       {
         label: 'Compétences acquises',
         data: Object.values(currentSkills),
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(5, 150, 105, 0.15)',
+        borderColor: '#059669',
         borderWidth: 2,
-        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+        pointBackgroundColor: '#059669',
         pointBorderColor: '#fff',
         pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(75, 192, 192, 1)'
+        pointHoverBorderColor: '#047857',
+        pointRadius: 4,
+        pointHoverRadius: 6
       }
     ]
   };
@@ -54,33 +56,90 @@ const SkillsRadar = ({ path, results }) => {
     scales: {
       r: {
         angleLines: {
-          display: true
+          color: 'rgba(0, 0, 0, 0.1)'
+        },
+        grid: {
+          color: 'rgba(0, 0, 0, 0.05)'
+        },
+        pointLabels: {
+          font: {
+            size: 12,
+            family: "'Inter', sans-serif",
+            weight: 500
+          },
+          color: '#2d2d2d'
         },
         suggestedMin: 0,
-        suggestedMax: 100
+        suggestedMax: 100,
+        ticks: {
+          font: {
+            size: 10
+          },
+          color: '#666'
+        }
       }
     },
     plugins: {
       legend: {
-        position: 'top'
+        position: 'top',
+        labels: {
+          font: {
+            size: 13,
+            family: "'Inter', sans-serif",
+            weight: 500
+          },
+          color: '#2d2d2d',
+          padding: 20,
+          usePointStyle: true,
+          pointStyle: 'circle'
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleFont: {
+          size: 13,
+          family: "'Inter', sans-serif",
+          weight: 600
+        },
+        bodyFont: {
+          size: 12,
+          family: "'Inter', sans-serif"
+        },
+        padding: 12,
+        cornerRadius: 8
       }
     }
   };
 
   return (
     <Paper 
-      elevation={2}
+      elevation={0}
       sx={{
+        width: '100%',
         p: 3,
-        m: 2,
-        maxWidth: '500px',
-        width: '100%'
+        borderRadius: '16px',
+        bgcolor: '#fff'
       }}
     >
-      <Typography variant="h6" gutterBottom align="center">
+      <Typography 
+        variant="h6" 
+        gutterBottom 
+        align="center"
+        sx={{
+          fontSize: '1.1rem',
+          fontWeight: 600,
+          color: '#2d2d2d',
+          mb: 3
+        }}
+      >
         Progression des compétences
       </Typography>
-      <Box sx={{ position: 'relative' }}>
+      <Box 
+        sx={{ 
+          position: 'relative',
+          p: 1
+        }}
+      >
         <Radar data={data} options={options} />
       </Box>
     </Paper>

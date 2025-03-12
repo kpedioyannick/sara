@@ -47,11 +47,43 @@ const PathSummary = ({ path, results, onActivityClick }) => {
     if (!explanation?.steps || explanation.steps.length === 0) return null;
 
     return (
-      <Box sx={{ mt: 2, p: 2, bgcolor: 'info.light', borderRadius: 1 }}>
+      <Box 
+        sx={{ 
+          mt: 2, 
+          p: 2.5,
+          borderRadius: '12px',
+          bgcolor: 'rgba(5, 150, 105, 0.04)',
+          border: '1px solid #059669'
+        }}
+      >
         {explanation.steps.map((step, i) => (
-          <Box key={i}>
-            <Typography variant="body2" color="info.dark">
-              Explication : {step.detail}
+          <Box 
+            key={i}
+            sx={{
+              '&:not(:last-child)': {
+                mb: 1.5
+              }
+            }}
+          >
+            <Typography 
+              variant="body2" 
+              sx={{
+                color: '#2d2d2d',
+                fontSize: '0.95rem',
+                lineHeight: 1.6,
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: 1
+              }}
+            >
+              <span style={{ 
+                color: '#059669',
+                fontWeight: 600,
+                flexShrink: 0
+              }}>
+                Explication :
+              </span>
+              {step.detail}
             </Typography>
           </Box>
         ))}
@@ -136,16 +168,24 @@ const PathSummary = ({ path, results, onActivityClick }) => {
 
   return (
     <Paper 
-      elevation={2}
+      elevation={0}
       sx={{
+        width: '100%',
         p: 3,
-        borderRadius: 2,
-        bgcolor: 'background.paper',
-        maxWidth: '600px',
-        width: '100%'
+        borderRadius: '16px',
+        bgcolor: '#fff'
       }}
     >
-      <Typography variant="h5" gutterBottom sx={{ color: 'primary.main' }}>
+      <Typography 
+        variant="h5" 
+        gutterBottom 
+        sx={{ 
+          color: '#2d2d2d',
+          fontSize: '1.3rem',
+          fontWeight: 700,
+          mb: 3
+        }}
+      >
         Résumé du parcours : {path.title}
       </Typography>
 
@@ -158,14 +198,25 @@ const PathSummary = ({ path, results, onActivityClick }) => {
             <React.Fragment key={activity.id}>
               <ListItem 
                 disablePadding
-                sx={{ mb: 1, flexDirection: 'column', alignItems: 'stretch' }}
+                sx={{ mb: 1.5, flexDirection: 'column', alignItems: 'stretch' }}
               >
                 <ListItemButton 
                   onClick={() => toggleExpand(activity.id)}
                   sx={{
-                    borderRadius: 1,
-                    border: 1,
-                    borderColor: 'divider',
+                    borderRadius: '12px',
+                    border: '2px solid',
+                    borderColor: result ? 
+                      (result.isCorrect ? '#059669' : '#ef4444') : 
+                      '#e8e8e8',
+                    bgcolor: result ?
+                      (result.isCorrect ? 'rgba(5, 150, 105, 0.04)' : 'rgba(239, 68, 68, 0.04)') :
+                      '#fff',
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      bgcolor: result ?
+                        (result.isCorrect ? 'rgba(5, 150, 105, 0.08)' : 'rgba(239, 68, 68, 0.08)') :
+                        'rgba(0, 0, 0, 0.04)'
+                    }
                   }}
                 >
                   <ListItemText
@@ -173,32 +224,54 @@ const PathSummary = ({ path, results, onActivityClick }) => {
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <Typography
                           sx={{
-                            color: result ? (result.isCorrect ? 'success.main' : 'error.main') : 'text.primary',
-                            flex: 1
+                            flex: 1,
+                            fontSize: '0.95rem',
+                            fontWeight: 500,
+                            color: result ? 
+                              (result.isCorrect ? '#059669' : '#ef4444') : 
+                              '#2d2d2d'
                           }}
                         >
                           {getActivityTypeLabel(activity.type)} {index + 1}
                         </Typography>
                         {result && (
                           result.isCorrect ? (
-                            <CheckCircleIcon color="success" />
+                            <CheckCircleIcon sx={{ color: '#059669', fontSize: '20px' }} />
                           ) : (
-                            <CancelIcon color="error" />
+                            <CancelIcon sx={{ color: '#ef4444', fontSize: '20px' }} />
                           )
                         )}
-                        {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                        {isExpanded ? 
+                          <ExpandLessIcon sx={{ color: '#666', fontSize: '20px' }} /> : 
+                          <ExpandMoreIcon sx={{ color: '#666', fontSize: '20px' }} />
+                        }
                       </Box>
                     }
                   />
                 </ListItemButton>
 
                 <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                  <Box sx={{ p: 2, bgcolor: 'background.default', borderRadius: 1, mt: 1 }}>
+                  <Box 
+                    sx={{ 
+                      p: 2.5, 
+                      mt: 1.5,
+                      borderRadius: '12px',
+                      bgcolor: 'rgba(0, 0, 0, 0.02)',
+                      border: '1px solid #e8e8e8'
+                    }}
+                  >
                     {renderActivityDetails(activity, result)}
                   </Box>
                 </Collapse>
               </ListItem>
-              {index < path.activities.length - 1 && <Divider />}
+              {index < path.activities.length - 1 && (
+                <Divider 
+                  sx={{ 
+                    my: 1.5,
+                    borderColor: 'rgba(0, 0, 0, 0.08)'
+                  }} 
+                />
+              )}
             </React.Fragment>
           );
         })}

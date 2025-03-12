@@ -62,8 +62,17 @@ const TrueFalseActivity = ({ content, onComplete }) => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h6" gutterBottom>
+    <Box sx={{ width: '100%' }}>
+      <Typography 
+        variant="h6" 
+        gutterBottom
+        sx={{
+          fontSize: '1.1rem',
+          fontWeight: 600,
+          color: '#2d2d2d',
+          mb: 3
+        }}
+      >
         {content.question}
       </Typography>
 
@@ -86,17 +95,49 @@ const TrueFalseActivity = ({ content, onComplete }) => {
           )}
           sx={{
             minWidth: 120,
+            px: 3,
+            py: 1.5,
+            borderRadius: '12px',
+            textTransform: 'none',
+            fontSize: '1rem',
+            fontWeight: 600,
+            border: '2px solid',
+            borderColor: isSubmitted ? (
+              content.correct_answer === true ? '#059669' :
+              selectedAnswer === true ? '#ef4444' :
+              'transparent'
+            ) : 'transparent',
             bgcolor: isSubmitted ? (
-              content.correct_answer === true ? 'success.main' :
-              selectedAnswer === true ? 'error.main' :
-              'primary.main'
-            ) : 'primary.main',
+              content.correct_answer === true ? 'rgba(5, 150, 105, 0.08)' :
+              selectedAnswer === true ? 'rgba(239, 68, 68, 0.08)' :
+              'rgba(0, 0, 0, 0.04)'
+            ) : '#059669',
+            color: isSubmitted ? (
+              content.correct_answer === true ? '#059669' :
+              selectedAnswer === true ? '#ef4444' :
+              '#666'
+            ) : '#fff',
+            boxShadow: !isSubmitted && '0 4px 12px rgba(5, 150, 105, 0.25)',
+            opacity: isSubmitted && !content.correct_answer && selectedAnswer !== true ? 0.6 : 1,
             '&:hover': {
+              bgcolor: !isSubmitted && '#047857'
+            },
+            '&.Mui-disabled': {
               bgcolor: isSubmitted ? (
-                content.correct_answer === true ? 'success.dark' :
-                selectedAnswer === true ? 'error.dark' :
-                'primary.dark'
-              ) : 'primary.dark'
+                content.correct_answer === true ? 'rgba(5, 150, 105, 0.08)' :
+                selectedAnswer === true ? 'rgba(239, 68, 68, 0.08)' :
+                'rgba(0, 0, 0, 0.04)'
+              ) : '#e8e8e8',
+              color: isSubmitted ? (
+                content.correct_answer === true ? '#059669' :
+                selectedAnswer === true ? '#ef4444' :
+                '#666'
+              ) : '#666',
+              borderColor: isSubmitted ? (
+                content.correct_answer === true ? '#059669' :
+                selectedAnswer === true ? '#ef4444' :
+                'transparent'
+              ) : 'transparent'
             }
           }}
         >
@@ -117,17 +158,49 @@ const TrueFalseActivity = ({ content, onComplete }) => {
           )}
           sx={{
             minWidth: 120,
+            px: 3,
+            py: 1.5,
+            borderRadius: '12px',
+            textTransform: 'none',
+            fontSize: '1rem',
+            fontWeight: 600,
+            border: '2px solid',
+            borderColor: isSubmitted ? (
+              content.correct_answer === false ? '#059669' :
+              selectedAnswer === false ? '#ef4444' :
+              'transparent'
+            ) : 'transparent',
             bgcolor: isSubmitted ? (
-              content.correct_answer === false ? 'success.main' :
-              selectedAnswer === false ? 'error.main' :
-              'primary.main'
-            ) : 'primary.main',
+              content.correct_answer === false ? 'rgba(5, 150, 105, 0.08)' :
+              selectedAnswer === false ? 'rgba(239, 68, 68, 0.08)' :
+              'rgba(0, 0, 0, 0.04)'
+            ) : '#059669',
+            color: isSubmitted ? (
+              content.correct_answer === false ? '#059669' :
+              selectedAnswer === false ? '#ef4444' :
+              '#666'
+            ) : '#fff',
+            boxShadow: !isSubmitted && '0 4px 12px rgba(5, 150, 105, 0.25)',
+            opacity: isSubmitted && !content.correct_answer && selectedAnswer !== false ? 0.6 : 1,
             '&:hover': {
+              bgcolor: !isSubmitted && '#047857'
+            },
+            '&.Mui-disabled': {
               bgcolor: isSubmitted ? (
-                content.correct_answer === false ? 'success.dark' :
-                selectedAnswer === false ? 'error.dark' :
-                'primary.dark'
-              ) : 'primary.dark'
+                content.correct_answer === false ? 'rgba(5, 150, 105, 0.08)' :
+                selectedAnswer === false ? 'rgba(239, 68, 68, 0.08)' :
+                'rgba(0, 0, 0, 0.04)'
+              ) : '#e8e8e8',
+              color: isSubmitted ? (
+                content.correct_answer === false ? '#059669' :
+                selectedAnswer === false ? '#ef4444' :
+                '#666'
+              ) : '#666',
+              borderColor: isSubmitted ? (
+                content.correct_answer === false ? '#059669' :
+                selectedAnswer === false ? '#ef4444' :
+                'transparent'
+              ) : 'transparent'
             }
           }}
         >

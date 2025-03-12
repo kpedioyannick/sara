@@ -27,16 +27,32 @@ const RevisionSheet = ({ content, onComplete }) => {
   };
 
   const renderSection = (item, index) => {
-    if (item.type === "question") return null; // Ne pas afficher la section questions
+    if (item.type === "question") return null;
 
     switch (item.type) {
       case 'section':
         return (
-          <Box key={index} sx={{ mb: 3 }}>
-            <Typography variant="h5" color="primary" gutterBottom>
+          <Box key={index} sx={{ mb: 4 }}>
+            <Typography 
+              variant="h5" 
+              gutterBottom
+              sx={{
+                fontSize: '1.3rem',
+                fontWeight: 700,
+                color: '#059669',
+                mb: 2
+              }}
+            >
               {item.title}
             </Typography>
-            <Typography variant="body1">
+            <Typography 
+              variant="body1"
+              sx={{
+                fontSize: '1rem',
+                lineHeight: 1.6,
+                color: '#2d2d2d'
+              }}
+            >
               {item.content}
             </Typography>
           </Box>
@@ -44,11 +60,27 @@ const RevisionSheet = ({ content, onComplete }) => {
 
       case 'subsection':
         return (
-          <Box key={index} sx={{ mb: 2, ml: 2 }}>
-            <Typography variant="h6" gutterBottom>
+          <Box key={index} sx={{ mb: 3, ml: 3 }}>
+            <Typography 
+              variant="h6" 
+              gutterBottom
+              sx={{
+                fontSize: '1.1rem',
+                fontWeight: 600,
+                color: '#2d2d2d',
+                mb: 1.5
+              }}
+            >
               {item.title}
             </Typography>
-            <Typography variant="body1">
+            <Typography 
+              variant="body1"
+              sx={{
+                fontSize: '1rem',
+                lineHeight: 1.6,
+                color: '#2d2d2d'
+              }}
+            >
               {item.content}
             </Typography>
           </Box>
@@ -56,11 +88,37 @@ const RevisionSheet = ({ content, onComplete }) => {
 
       case 'example':
         return (
-          <Box key={index} sx={{ mb: 2, ml: 2, p: 2, bgcolor: 'info.light', borderRadius: 1 }}>
-            <Typography variant="subtitle1" gutterBottom>
+          <Box 
+            key={index} 
+            sx={{ 
+              mb: 3, 
+              ml: 3, 
+              p: 2.5, 
+              bgcolor: 'rgba(5, 150, 105, 0.04)',
+              border: '1px solid #059669',
+              borderRadius: '12px'
+            }}
+          >
+            <Typography 
+              variant="subtitle1" 
+              gutterBottom
+              sx={{
+                fontSize: '1rem',
+                fontWeight: 600,
+                color: '#059669',
+                mb: 1
+              }}
+            >
               {item.title}
             </Typography>
-            <Typography variant="body1">
+            <Typography 
+              variant="body1"
+              sx={{
+                fontSize: '0.95rem',
+                lineHeight: 1.6,
+                color: '#2d2d2d'
+              }}
+            >
               {item.content}
             </Typography>
           </Box>
@@ -68,11 +126,37 @@ const RevisionSheet = ({ content, onComplete }) => {
 
       case 'remark':
         return (
-          <Box key={index} sx={{ mb: 2, ml: 2, p: 2, bgcolor: 'warning.light', borderRadius: 1 }}>
-            <Typography variant="subtitle1" gutterBottom>
+          <Box 
+            key={index} 
+            sx={{ 
+              mb: 3, 
+              ml: 3, 
+              p: 2.5, 
+              bgcolor: 'rgba(245, 158, 11, 0.04)',
+              border: '1px solid #f59e0b',
+              borderRadius: '12px'
+            }}
+          >
+            <Typography 
+              variant="subtitle1" 
+              gutterBottom
+              sx={{
+                fontSize: '1rem',
+                fontWeight: 600,
+                color: '#f59e0b',
+                mb: 1
+              }}
+            >
               {item.title}
             </Typography>
-            <Typography variant="body1">
+            <Typography 
+              variant="body1"
+              sx={{
+                fontSize: '0.95rem',
+                lineHeight: 1.6,
+                color: '#2d2d2d'
+              }}
+            >
               {item.content}
             </Typography>
           </Box>
@@ -84,13 +168,38 @@ const RevisionSheet = ({ content, onComplete }) => {
   };
 
   return (
-    <Paper sx={{ p: 3, maxWidth: '800px', mx: 'auto' }}>
+    <Paper 
+      sx={{ 
+        width: '100%',
+        p: 1,
+        borderRadius: '16px',
+        boxShadow: 'none',
+        bgcolor: '#fff'
+      }}
+    >
       {content.map((item, index) => renderSection(item, index))}
-      <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ 
+        mt: 3,
+        display: 'flex', 
+        justifyContent: 'flex-start'
+      }}>
         <Button 
           variant="contained" 
-          color="primary"
           onClick={handleComplete}
+          sx={{
+            minWidth: 120,
+            width: 'auto',
+            bgcolor: '#059669',
+            px: 3,
+            py: 1,
+            textTransform: 'none',
+            fontSize: '0.95rem',
+            fontWeight: 600,
+            boxShadow: '0 4px 12px rgba(5, 150, 105, 0.25)',
+            '&:hover': {
+              bgcolor: '#047857'
+            }
+          }}
         >
           Terminer la révision
         </Button>

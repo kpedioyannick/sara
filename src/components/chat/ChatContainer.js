@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Button, Typography, useTheme, useMediaQuery } from '@mui/material';
+import { Box, Button, useTheme, useMediaQuery } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Message from './Message';
@@ -32,7 +32,6 @@ const ChatContainer = () => {
   const [currentExplanation, setCurrentExplanation] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const lastMessageRef = useRef(null);
 
   useEffect(() => {
     const loadInitialPath = async () => {
@@ -416,7 +415,7 @@ const ChatContainer = () => {
     setIsExchangeExpanded(expanded);
   };
 
-  const renderMessage = (msg, index) => {
+  const addUnderstandingButtons = (msg, index) => {
     console.log("Rendering message:", msg);
     
     if (msg.showUnderstandingButtons && waitingForUnderstanding) {
@@ -427,23 +426,56 @@ const ChatContainer = () => {
             display: 'flex', 
             gap: 2, 
             justifyContent: 'center',
-            mt: 2 
+            mt: 3,
+            animation: 'fadeIn 0.3s ease-out',
+            '@keyframes fadeIn': {
+              from: { opacity: 0, transform: 'translateY(10px)' },
+              to: { opacity: 1, transform: 'translateY(0)' }
+            }
           }}>
             <Button
               variant="contained"
-              color="success"
-              startIcon={<CheckCircleOutlineIcon />}
               onClick={handleUnderstand}
+              startIcon={<CheckCircleOutlineIcon />}
+              sx={{
+                bgcolor: '#059669',
+                px: 3,
+                py: 1.5,
+                borderRadius: '12px',
+                textTransform: 'none',
+                fontWeight: 600,
+                boxShadow: '0 4px 12px rgba(5, 150, 105, 0.25)',
+                '&:hover': {
+                  bgcolor: '#047857',
+                  transform: 'translateY(-2px)'
+                },
+                transition: 'all 0.2s ease'
+              }}
             >
-              Oui
+              J'ai compris
             </Button>
             <Button
-              variant="contained"
-              color="primary"
-              startIcon={<HelpOutlineIcon />}
+              variant="outlined"
               onClick={handleNeedHelp}
+              startIcon={<HelpOutlineIcon />}
+              sx={{
+                borderColor: '#059669',
+                color: '#059669',
+                px: 3,
+                py: 1.5,
+                borderRadius: '12px',
+                textTransform: 'none',
+                fontWeight: 600,
+                borderWidth: 2,
+                '&:hover': {
+                  borderColor: '#047857',
+                  bgcolor: 'rgba(5, 150, 105, 0.04)',
+                  transform: 'translateY(-2px)'
+                },
+                transition: 'all 0.2s ease'
+              }}
             >
-              Non, j'ai besoin d'aide
+              J'ai besoin d'aide
             </Button>
           </Box>
         </Box>
@@ -454,10 +486,19 @@ const ChatContainer = () => {
       return (
         <Box key={index}>
           <Message {...msg} />
-          <SkillsRadar 
-            path={currentPath}
-            results={pathResults}
-          />
+          <Box sx={{ 
+            mt: 3,
+            p: 2,
+            borderRadius: '16px',
+            bgcolor: '#fff',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+            animation: 'fadeIn 0.3s ease-out'
+          }}>
+            <SkillsRadar 
+              path={currentPath}
+              results={pathResults}
+            />
+          </Box>
         </Box>
       );
     }
@@ -467,12 +508,33 @@ const ChatContainer = () => {
       return (
         <Box key={index}>
           <Message {...msg} />
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2 }}>
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: 1.5, 
+            mt: 3,
+            animation: 'fadeIn 0.3s ease-out'
+          }}>
             {msg.options.map((option, i) => (
               <Button
                 key={i}
                 variant="outlined"
                 onClick={() => handleAnswer(option.text, msg)}
+                sx={{
+                  borderColor: '#e8e8e8',
+                  color: '#2d2d2d',
+                  p: 1.5,
+                  borderRadius: '12px',
+                  textAlign: 'left',
+                  justifyContent: 'flex-start',
+                  textTransform: 'none',
+                  '&:hover': {
+                    borderColor: '#059669',
+                    bgcolor: 'rgba(5, 150, 105, 0.04)',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.2s ease'
+                }}
               >
                 {option.text}
               </Button>
@@ -490,10 +552,18 @@ const ChatContainer = () => {
 
     return (
       <Box sx={{ 
-        width: '100%',
-        maxWidth: '600px',
-        mx: 'auto',
-        p: 2
+        width: '90%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        px: { xs: 1, sm: 2, md: 3 },
+        py: 2,
+        '& > *': { // S'assure que l'ActivityRenderer prend tout l'espace disponible
+          flex: 1,
+          width: '100%',
+          maxWidth: '100%'
+        }
       }}>
         <ActivityRenderer
           activity={currentActivity}
@@ -507,8 +577,17 @@ const ChatContainer = () => {
     <Box sx={{ 
       flex: 1,
       display: 'flex',
-      bgcolor: 'background.default',
-      pt: '4px'
+      bgcolor: '#f8f8f8',
+      gap: 0,
+      position: 'relative',
+      overflow: 'hidden',
+      borderRadius: '0px',
+      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
+      animation: 'fadeIn 0.5s ease-out',
+      '@keyframes fadeIn': {
+        from: { opacity: 0, transform: 'translateY(20px)' },
+        to: { opacity: 1, transform: 'translateY(0)' }
+      }
     }}>
       {/* Barre de progression */}
       {currentPath && isPathStarted && (
@@ -520,26 +599,35 @@ const ChatContainer = () => {
 
       {/* Zone d'activité */}
       <Box sx={{ 
-        flex: 1,
+        flex: '0 0 60%',
         display: 'flex',
         flexDirection: 'column',
-        borderRight: 1,
-        borderColor: 'divider'
+        borderRight: '2px solid #e8e8e8',
+        position: 'relative',
+        bgcolor: '#fff',
+        boxShadow: '4px 0 12px rgba(0, 0, 0, 0.03)'
       }}>
         <Box sx={{ 
           flex: 1, 
-          overflowY: 'auto', 
-          p: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: currentPath && !isPathStarted ? 'center' : 'flex-start'
+          overflowY: 'auto',
+          p: 3,
+          '&::-webkit-scrollbar': {
+            width: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#f1f1f1',
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: '#059669',
+            borderRadius: '4px',
+            '&:hover': {
+              background: '#047857'
+            }
+          },
         }}>
           {currentPath && !isPathStarted ? (
-            <PathPresentation 
-              path={currentPath} 
-              onStart={handleStartPath}
-            />
+            <PathPresentation path={currentPath} onStart={handleStartPath} />
           ) : isPathCompleted ? (
             <PathSummary
               path={currentPath}
@@ -547,32 +635,60 @@ const ChatContainer = () => {
               onActivityClick={handleActivitySummaryClick}
             />
           ) : (
-            <>
-              {currentActivity && (
-                renderActivityWithFeedback()
-              )}
-              {!currentActivity && 
-                messages.filter(m => !m.isSara).map((msg, i) => (
-                  <Message key={i} {...msg} />
-                ))
-              }
-            </>
+            currentActivity && renderActivityWithFeedback()
           )}
         </Box>
-        {isPathStarted && !isPathCompleted && !waitingForUnderstanding && 
-          <ChatInput onSend={handleSend} />
-        }
       </Box>
 
-      {/* Zone d'échange */}
+      {/* Zone de chat */}
       <Box sx={{ 
-        flex: 1,
+        flex: '0 0 40%',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        bgcolor: '#fff',
+        position: 'relative'
       }}>
-        <Box sx={{ flex: 1, overflowY: 'auto', p: 2 }}>
-          {messages.filter(m => m.isSara).map((msg, i) => renderMessage(msg, i))}
+        <Box
+          sx={{
+            p: 2,
+            borderBottom: '2px solid #e8e8e8',
+            background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+            color: '#fff',
+            fontWeight: 600,
+            fontSize: '1.1rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            boxShadow: '0 4px 12px rgba(5, 150, 105, 0.15)'
+          }}
+        >
+          Discussion avec Sara
         </Box>
+        <Box sx={{ 
+          flex: 1,
+          overflowY: 'auto',
+          p: 3,
+          bgcolor: '#fafafa',
+          backgroundImage: 'radial-gradient(#e8e8e8 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
+          '&::-webkit-scrollbar': {
+            width: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#f1f1f1',
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: '#059669',
+            borderRadius: '4px',
+            '&:hover': {
+              background: '#047857'
+            }
+          },
+        }}>
+          {messages.filter(m => m.isSara).map((msg, i) => addUnderstandingButtons(msg, i))}
+        </Box>
+        <ChatInput onSend={handleSend} />
       </Box>
     </Box>
   );
@@ -625,20 +741,38 @@ const ChatContainer = () => {
         activityUpdated={activityUpdated}
         onStateChange={handleExchangeStateChange}
       >
-        {messages.filter(m => m.isSara).map((msg, i) => renderMessage(msg, i))}
+        {messages.filter(m => m.isSara).map((msg, i) => addUnderstandingButtons(msg, i))}
       </MobileExchangeBlock>
     </Box>
   );
 
   return (
-    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <NavbarGPT onPathSelect={handlePathSelect} />
-      {currentPath && isPathStarted && (
-        <ProgressBar 
-          results={pathResults}
-          totalActivities={currentPath.activities.length}
-        />
-      )}
+    <Box sx={{ 
+      height: '100vh', 
+      display: 'flex', 
+      flexDirection: 'column',
+      bgcolor: '#f8f8f8',
+      p: 2,
+      backgroundImage: 'radial-gradient(#e8e8e8 1px, transparent 1px)',
+      backgroundSize: '32px 32px',
+    }}>
+      <Box sx={{ position: 'relative' }}>
+        <NavbarGPT onPathSelect={handlePathSelect} />
+        {currentPath && isPathStarted && (
+          <Box sx={{ 
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1200
+          }}>
+            <ProgressBar 
+              results={pathResults}
+              totalActivities={currentPath.activities.length}
+            />
+          </Box>
+        )}
+      </Box>
       {isMobile ? renderMobileLayout() : renderDesktopLayout()}
     </Box>
   );

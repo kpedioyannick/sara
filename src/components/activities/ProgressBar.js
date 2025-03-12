@@ -11,7 +11,7 @@ const ProgressBar = ({ results, totalActivities }) => {
       height: '4px',
       bgcolor: 'grey.200',
       position: 'fixed',
-      top: isMobile ? '56px' : 0, // 56px est la hauteur par défaut de AppBar en mobile
+      top: isMobile ? 0 : 0, // 56px est la hauteur par défaut de AppBar en mobile
       left: 0,
       zIndex: 1100,
       display: 'flex'

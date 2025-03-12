@@ -62,17 +62,29 @@ const Navbar = ({ onPathSelect }) => {
   const selectedCategoryData = categories.find(c => c.id === selectedCategory);
 
   return (
-    <AppBar position="static">
+    <AppBar 
+      position="static"
+      elevation={0}
+      sx={{
+        bgcolor: '#059669',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+      }}
+    >
       <Toolbar sx={{ 
         flexDirection: isMobile ? 'column' : 'row',
         gap: 2,
-        py: isMobile ? 2 : 0
+        py: isMobile ? 2 : 1.5,
+        px: 3
       }}>
         <Typography 
           variant="h6" 
           sx={{ 
             flexGrow: isMobile ? 0 : 1,
-            mb: isMobile ? 1 : 0
+            mb: isMobile ? 1 : 0,
+            fontSize: '1.3rem',
+            fontWeight: 700,
+            letterSpacing: '0.5px',
+            color: '#fff'
           }}
         >
           SARA
@@ -92,7 +104,19 @@ const Navbar = ({ onPathSelect }) => {
               value={selectedCategory}
               onChange={handleCategoryChange}
               displayEmpty
-              sx={{ bgcolor: 'white' }}
+              sx={{
+                bgcolor: 'rgba(255, 255, 255, 0.9)',
+                borderRadius: '12px',
+                '& .MuiOutlinedInput-notchedOutline': {
+                  border: 'none'
+                },
+                '&:hover': {
+                  bgcolor: '#fff'
+                },
+                '& .MuiSelect-select': {
+                  py: 1.5
+                }
+              }}
             >
               <MenuItem value="">
                 <em>Sélectionner une catégorie</em>
@@ -114,7 +138,22 @@ const Navbar = ({ onPathSelect }) => {
               value={selectedSubcategory}
               onChange={handleSubcategoryChange}
               displayEmpty
-              sx={{ bgcolor: 'white' }}
+              sx={{
+                bgcolor: 'rgba(255, 255, 255, 0.9)',
+                borderRadius: '12px',
+                '& .MuiOutlinedInput-notchedOutline': {
+                  border: 'none'
+                },
+                '&:hover': {
+                  bgcolor: '#fff'
+                },
+                '& .MuiSelect-select': {
+                  py: 1.5
+                },
+                '&.Mui-disabled': {
+                  bgcolor: 'rgba(255, 255, 255, 0.6)'
+                }
+              }}
             >
               <MenuItem value="">
                 <em>Sélectionner une sous-catégorie</em>
@@ -136,7 +175,19 @@ const Navbar = ({ onPathSelect }) => {
                 value=""
                 onChange={(e) => onPathSelect(e.target.value)}
                 displayEmpty
-                sx={{ bgcolor: 'white' }}
+                sx={{
+                  bgcolor: 'rgba(255, 255, 255, 0.9)',
+                  borderRadius: '12px',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none'
+                  },
+                  '&:hover': {
+                    bgcolor: '#fff'
+                  },
+                  '& .MuiSelect-select': {
+                    py: 1.5
+                  }
+                }}
               >
                 <MenuItem value="">
                   <em>Sélectionner un parcours</em>

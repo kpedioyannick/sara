@@ -11,7 +11,6 @@ import {
   ListItemIcon,
   ListItemButton,
   Box,
-  Select,
   MenuItem,
   useTheme,
   useMediaQuery,
@@ -214,8 +213,10 @@ const NavbarGPT = ({ onPathSelect, onResumePath }) => {
           <ListItemText 
             primary="Mes parcours"
             primaryTypographyProps={{
-              variant: 'subtitle1',
-              fontWeight: 'bold'
+              fontSize: '1rem',
+              fontWeight: 600,
+              color: '#2d2d2d',
+              mb: 1
             }}
           />
         </ListItem>
@@ -225,29 +226,47 @@ const NavbarGPT = ({ onPathSelect, onResumePath }) => {
               onClick={() => handlePathClick(userPath)}
               sx={{ 
                 pl: 4,
-                position: 'relative'
+                position: 'relative',
+                borderRadius: '12px',
+                mb: 0.5,
+                '&:hover': {
+                  bgcolor: 'rgba(5, 150, 105, 0.04)'
+                }
               }}
             >
               <ListItemText
                 primary={userPath.pathDetails.title}
+                primaryTypographyProps={{
+                  fontSize: '0.9rem',
+                  fontWeight: 500,
+                  color: '#2d2d2d',
+                  mb: 0.5
+                }}
                 secondaryTypographyProps={{ component: 'div' }}
                 secondary={
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Box sx={{ 
                       flex: 1,
                       height: 4,
-                      bgcolor: 'grey.200',
-                      borderRadius: 1,
+                      bgcolor: 'rgba(0, 0, 0, 0.08)',
+                      borderRadius: 2,
                       overflow: 'hidden'
                     }}>
                       <Box sx={{ 
                         width: `${userPath.progress}%`,
                         height: '100%',
-                        bgcolor: 'primary.main',
+                        bgcolor: '#059669',
                         transition: 'width 0.3s ease'
                       }} />
                     </Box>
-                    <Typography component="span" variant="caption" color="text.secondary">
+                    <Typography 
+                      component="span" 
+                      variant="caption" 
+                      sx={{
+                        fontSize: '0.8rem',
+                        color: '#666'
+                      }}
+                    >
                       {Math.round(userPath.progress)}%
                     </Typography>
                   </Box>
@@ -256,12 +275,10 @@ const NavbarGPT = ({ onPathSelect, onResumePath }) => {
               {userPath.progress === 100 && (
                 <Box sx={{ 
                   position: 'absolute',
-                  right: 8,
+                  right: 12,
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: 'success.main'
+                  color: '#059669'
                 }}>
                   <CheckCircleIcon fontSize="small" />
                 </Box>
@@ -309,9 +326,22 @@ const NavbarGPT = ({ onPathSelect, onResumePath }) => {
         <>
           <IconButton
             onClick={(e) => setAnchorEl(e.currentTarget)}
-            sx={{ ml: 2 }}
+            sx={{ 
+              ml: 2,
+              color: '#fff',
+              border: '2px solid rgba(255, 255, 255, 0.2)',
+              '&:hover': {
+                border: '2px solid rgba(255, 255, 255, 0.4)',
+                bgcolor: 'rgba(255, 255, 255, 0.1)'
+              }
+            }}
           >
-            <Avatar sx={{ bgcolor: 'primary.main' }}>
+            <Avatar sx={{ 
+              bgcolor: 'transparent',
+              color: '#fff',
+              fontWeight: 600,
+              fontSize: '1rem'
+            }}>
               {user.name[0].toUpperCase()}
             </Avatar>
           </IconButton>
@@ -319,11 +349,33 @@ const NavbarGPT = ({ onPathSelect, onResumePath }) => {
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={() => setAnchorEl(null)}
+            PaperProps={{
+              sx: {
+                mt: 1,
+                borderRadius: '12px',
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
+              }
+            }}
           >
-            <MenuItem onClick={() => setAnchorEl(null)}>
+            <MenuItem 
+              onClick={() => setAnchorEl(null)}
+              sx={{ 
+                py: 1.5,
+                px: 2,
+                fontSize: '0.95rem'
+              }}
+            >
               Mon profil
             </MenuItem>
-            <MenuItem onClick={handleLogout}>
+            <MenuItem 
+              onClick={handleLogout}
+              sx={{ 
+                py: 1.5,
+                px: 2,
+                fontSize: '0.95rem',
+                color: '#ef4444'
+              }}
+            >
               Se déconnecter
             </MenuItem>
           </Menu>
@@ -333,9 +385,19 @@ const NavbarGPT = ({ onPathSelect, onResumePath }) => {
 
     return (
       <Button
-        color="inherit"
         onClick={() => setLoginOpen(true)}
-        sx={{ ml: 2 }}
+        startIcon={<AccountCircleIcon />}
+        sx={{ 
+          ml: 2,
+          color: '#fff',
+          border: '2px solid rgba(255, 255, 255, 0.2)',
+          px: 2,
+          py: 0.75,
+          '&:hover': {
+            border: '2px solid rgba(255, 255, 255, 0.4)',
+            bgcolor: 'rgba(255, 255, 255, 0.1)'
+          }
+        }}
       >
         Se connecter
       </Button>

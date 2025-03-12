@@ -54,8 +54,17 @@ const MultipleChoiceActivity = ({ content, onComplete }) => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h6" gutterBottom>
+    <Box sx={{ width: '100%' }}>
+      <Typography 
+        variant="h6" 
+        gutterBottom
+        sx={{
+          fontSize: '1.1rem',
+          fontWeight: 600,
+          color: '#2d2d2d',
+          mb: 3
+        }}
+      >
         {content.question}
       </Typography>
 
@@ -68,16 +77,27 @@ const MultipleChoiceActivity = ({ content, onComplete }) => {
             <FormControlLabel
               key={index}
               value={option.text}
-              control={<Radio />}
+              control={
+                <Radio 
+                  sx={{
+                    color: '#e8e8e8',
+                    '&.Mui-checked': {
+                      color: '#059669',
+                    }
+                  }}
+                />
+              }
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Typography>{option.text}</Typography>
+                  <Typography sx={{ fontSize: '1rem', fontWeight: 500 }}>
+                    {option.text}
+                  </Typography>
                   {isSubmitted && (
                     option.is_correct ? (
-                      <CheckCircleIcon sx={{ color: 'success.main' }} />
+                      <CheckCircleIcon sx={{ color: '#059669' }} />
                     ) : (
                       option.text === selectedAnswer && (
-                        <CancelIcon sx={{ color: 'error.main' }} />
+                        <CancelIcon sx={{ color: '#ef4444' }} />
                       )
                     )
                   )}
@@ -85,14 +105,25 @@ const MultipleChoiceActivity = ({ content, onComplete }) => {
               }
               disabled={isSubmitted}
               sx={{
-                p: 1,
-                borderRadius: 1,
-                ...(isSubmitted && {
-                  bgcolor: option.is_correct ? 'success.light' : 
-                          (option.text === selectedAnswer ? 'error.light' : 'transparent'),
-                  color: option.is_correct ? 'success.main' : 
-                         (option.text === selectedAnswer ? 'error.main' : 'text.primary')
-                })
+                width: '100%',
+                m: 0,
+                mb: 1.5,
+                p: 1.5,
+                borderRadius: '12px',
+                border: '2px solid',
+                borderColor: isSubmitted ? 
+                  (option.is_correct ? '#059669' : 
+                   option.text === selectedAnswer ? '#ef4444' : '#e8e8e8') 
+                  : '#e8e8e8',
+                bgcolor: isSubmitted ?
+                  (option.is_correct ? 'rgba(5, 150, 105, 0.04)' :
+                   option.text === selectedAnswer ? 'rgba(239, 68, 68, 0.04)' : '#fff')
+                  : '#fff',
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  bgcolor: !isSubmitted && 'rgba(5, 150, 105, 0.04)',
+                  borderColor: !isSubmitted && '#059669'
+                }
               }}
             />
           ))}
@@ -103,7 +134,24 @@ const MultipleChoiceActivity = ({ content, onComplete }) => {
         variant="contained" 
         onClick={handleSubmit}
         disabled={!selectedAnswer || isSubmitted}
-        sx={{ mt: 2 }}
+        sx={{
+          mt: 3,
+          bgcolor: '#059669',
+          px: 4,
+          py: 1.5,
+          borderRadius: '12px',
+          textTransform: 'none',
+          fontSize: '1rem',
+          fontWeight: 600,
+          boxShadow: '0 4px 12px rgba(5, 150, 105, 0.25)',
+          '&:hover': {
+            bgcolor: '#047857'
+          },
+          '&.Mui-disabled': {
+            bgcolor: '#e8e8e8',
+            color: '#666'
+          }
+        }}
       >
         Valider
       </Button>
