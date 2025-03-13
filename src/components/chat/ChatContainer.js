@@ -8,7 +8,8 @@ import PathPresentation from '../activities/PathPresentation';
 import PathSummary from '../activities/PathSummary';
 import ProgressBar from '../activities/ProgressBar';
 import SkillsRadar from '../activities/SkillsRadar';
-import { mockApiService as api } from '../../mocks/services/mockApiService';
+import { mockApiService as mockApi } from '../../mocks/services/mockApiService';
+import { apiService as api } from '../../services/apiService';
 import NavbarGPT from '../navigation/NavbarGPT';
 import MobileExchangeBlock from './MobileExchangeBlock';
 import ActivityRenderer from '../activities/ActivityRenderer';
@@ -36,7 +37,7 @@ const ChatContainer = () => {
   useEffect(() => {
     const loadInitialPath = async () => {
       try {
-        const path = await api.getLearningPath('path1');
+        const path = await mockApi.getLearningPath('path1');
         setCurrentPath(path);
         setMessages([{
           text: `Bienvenue ! Je vous présente le parcours "${path.title}"`,
@@ -124,13 +125,21 @@ const ChatContainer = () => {
     }]);
 
     try {
-      const explanation = await api.getDetailedExplanation(currentActivity.id);
+      const problemContent = currentActivity.content || 
+                           currentActivity.question || 
+                           `Activité ${currentActivity.id}`;
+
+      const explanation = await api.getDetailedExplanation(
+        currentActivity.id,
+        problemContent
+      );
+
       // Stocker l'explication pour l'utiliser plus tard
       setCurrentExplanation(explanation);
       // Démarrer avec la première étape
       handleExplanationStep(0, explanation);
     } catch (error) {
-      console.error('Erreur lors de la récupération des explications:', error);
+      console.error('Erreur lors de la récupération de l\'explication:', error);
       setWaitingForUnderstanding(true);
       setMessages(prev => [...prev, {
         text: "Désolé, je n'ai pas pu récupérer les explications détaillées.",
@@ -395,7 +404,7 @@ const ChatContainer = () => {
 
   const handlePathSelect = async (pathId) => {
     try {
-      const path = await api.getLearningPath(pathId);
+      const path = await mockApi.getLearningPath(pathId);
       setCurrentPath(path);
       setMessages([{
         text: `Bienvenue ! Je vous présente le parcours "${path.title}"`,

@@ -1,0 +1,22 @@
+{
+  "title": "H5P Workspace",
+  "language": "fr",
+  "mainLibrary": "H5P.QuestionSet",
+  "embedTypes": ["div"],
+  "license": "U",
+  "defaultLanguage": "fr",
+  "libraries": {
+    "H5P.QuestionSet": {
+      "title": "Question Set",
+      "majorVersion": 1,
+      "minorVersion": 17,
+      "patchVersion": 0
+    },
+    "H5P.MultiChoice": {
+      "title": "Multiple Choice",
+      "majorVersion": 1,
+      "minorVersion": 14,
+      "patchVersion": 0
+    }
+  }
+} 

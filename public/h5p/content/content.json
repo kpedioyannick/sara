@@ -1,0 +1,37 @@
+{
+  "title": "Quiz Test",
+  "language": "fr",
+  "library": {
+    "name": "H5P.MultiChoice",
+    "majorVersion": 1,
+    "minorVersion": 14
+  },
+  "params": {
+    "question": "Quelle est la capitale de la France ?",
+    "answers": [
+      {
+        "text": "Paris",
+        "correct": true,
+        "tipsAndFeedback": {
+          "tip": "",
+          "chosenFeedback": "Correct !",
+          "notChosenFeedback": ""
+        }
+      },
+      {
+        "text": "Londres",
+        "correct": false,
+        "tipsAndFeedback": {
+          "tip": "",
+          "chosenFeedback": "Non, c'est Paris !",
+          "notChosenFeedback": ""
+        }
+      }
+    ],
+    "behaviour": {
+      "enableRetry": true,
+      "enableSolutionsButton": true,
+      "type": "single"
+    }
+  }
+} 

@@ -6,6 +6,8 @@ import FillInTheBlankActivity from './FillInTheBlankActivity';
 import OpenEndedActivity from './OpenEndedActivity';
 import RevisionSheet from './RevisionSheet';
 import RevisionSheetVideo from './RevisionSheetVideo';
+import H5PActivity from './H5PActivity';
+import PlayH5p from './PlayH5p';
 
 const ActivityRenderer = ({ activity, onComplete }) => {
   const renderActivity = () => {
@@ -22,6 +24,8 @@ const ActivityRenderer = ({ activity, onComplete }) => {
         return <RevisionSheet content={activity.content} onComplete={onComplete} />;
       case 'revision_sheet_video':
         return <RevisionSheetVideo content={activity.content} onComplete={onComplete} />;
+      case 'h5p':
+        return <PlayH5p h5pJsonPath="./h5p/for-or-since" />
       default:
         return <div>Type d'activité non supporté: {activity.type}</div>;
     }

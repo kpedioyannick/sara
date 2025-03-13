@@ -1,35 +1,55 @@
 export const learningPaths = [
   {
     id: 'path1',
-    title: 'Les bases des mathématiques',
-    description: 'Parcours d\'introduction aux mathématiques',
+    title: 'Notions de Probabilité',
+    description: 'Découverte des probabilités et de l\'équiprobabilité',
     skills: {
-      'Calcul mental': 0,
+      'Probabilités': 0,
       'Logique': 0,
-      'Géométrie': 0,
-      'Algèbre': 0,
-      'Résolution de problèmes': 0
+      'Calculs mathématiques': 0
     },
     activities: [
+      {
+        "id": "12",
+        "type": "multiple_choice",
+        "content": {
+          "question": "On lance un dé à 6 faces. Quelle est la probabilité d'obtenir un 4 ?",
+          "options": [
+            { "text": "1/6", "is_correct": true },
+            { "text": "1/3", "is_correct": false },
+            { "text": "1/2", "is_correct": false },
+            { "text": "1/4", "is_correct": false }
+          ],
+          "explanation": {
+            "steps": [
+              { "detail": "Un dé a 6 faces et chaque face a la même probabilité d'apparaître. La probabilité d'obtenir un 4 est donc 1/6." }
+            ]
+          }
+        },
+        "skillsImpact": {
+          "Notion de probabilité": 20,
+          "Équiprobabilité": 20
+        }
+      },
       {
         id: 'act1',
         type: 'multiple_choice',
         content: {
-          question: 'Combien font 2 + 2 ?',
+          question: 'Un dé à six faces équilibré est lancé. Quelle est la probabilité d\'obtenir un nombre pair ?',
           options: [
-            { text: '3', is_correct: false },
-            { text: '4', is_correct: true },
-            { text: '5', is_correct: false },
-            { text: '6', is_correct: false }
+            { text: '1/2', is_correct: true },
+            { text: '1/3', is_correct: false },
+            { text: '2/3', is_correct: false },
+            { text: '1/6', is_correct: false }
           ],
           explanation: {
             steps: [
-              { detail: "2 + 2 = 4 est une opération de base en arithmétique" }
+              { detail: "Les nombres pairs sur un dé à six faces sont 2, 4 et 6. Il y a 3 issues favorables sur 6, donc la probabilité est 3/6 = 1/2." }
             ]
           }
         },
         skillsImpact: {
-          'Calcul mental': 20,
+          'Probabilités': 20,
           'Logique': 10
         }
       },
@@ -37,146 +57,86 @@ export const learningPaths = [
         id: 'act2',
         type: 'true_false',
         content: {
-          question: 'La racine carrée de 16 est égale à 4.',
+          question: 'Si on tire une carte au hasard d\'un jeu de 52 cartes, la probabilité d\'obtenir un roi est de 4/52.',
           correct_answer: true,
           explanation: {
             steps: [
-              { detail: "4 × 4 = 16, donc 4 est bien la racine carrée de 16" }
+              { detail: "Il y a 4 rois dans un jeu de 52 cartes. La probabilité est donc 4/52, soit 1/13." }
             ]
           }
         },
         skillsImpact: {
-          'Calcul mental': 15,
-          'Algèbre': 25
+          'Probabilités': 15,
+          'Logique': 10
         }
       },
       {
         id: 'act3',
         type: 'fill_in_the_blank',
         content: {
-          text: ["Pour obtenir 10, il faut ajouter _____ à 7"],
-          answers: ["3"],
+          text: ["Une urne contient 5 boules rouges et 3 boules bleues. La probabilité de tirer une boule rouge est _____"],
+          answers: ["5/8"],
           explanation: {
             steps: [
-              { detail: "7 + 3 = 10, donc il faut ajouter 3 à 7 pour obtenir 10" }
+              { detail: "Il y a 5 boules rouges et un total de 8 boules. La probabilité est donc 5/8." }
             ]
           }
         },
         skillsImpact: {
-          'Calcul mental': 20,
-          'Logique': 15
+          'Probabilités': 20,
+          'Calculs mathématiques': 15
         }
       },
       {
         id: 'act4',
         type: 'open_ended',
         content: {
-          question: "Expliquez pourquoi il est important de connaître ses tables de multiplication.",
-          answer: "calcul mental rapidité quotidien",
+          question: "Explique pourquoi la somme des probabilités de toutes les issues d'une expérience aléatoire est toujours égale à 1.",
+          answer: "Totalité des issues, événement certain, répartition des probabilités",
           explanation: {
             steps: [
-              { detail: "Les tables de multiplication sont essentielles pour le calcul mental" },
-              { detail: "Elles permettent de résoudre rapidement des problèmes du quotidien" }
+              { detail: "Dans une expérience aléatoire, une issue doit forcément se produire." },
+              { detail: "La somme des probabilités de toutes les issues doit donc être 1." }
             ]
           },
           typeTagHtmlAnswer: "input"
         },
         skillsImpact: {
           'Expression écrite': 25,
-          'Logique': 20
+          'Probabilités': 20
         }
       },
       {
         id: 'act5',
-        type: 'multiple_choice',
-        content: {
-          question: 'Quelle est la racine carrée de 16 ?',
-          options: [
-            { text: '2', is_correct: false },
-            { text: '4', is_correct: true },
-            { text: '6', is_correct: false },
-            { text: '8', is_correct: false }
-          ],
-          explanation: {
-            steps: [
-              { detail: "La racine carrée de 16 est 4 car 4 × 4 = 16" }
-            ]
-          }
-        },
-        skillsImpact: {
-          'Calcul mental': 15,
-          'Algèbre': 25
-        }
-      },
-      {
-        id: 'act6',
-        type: 'fill_in_the_blank',
-        content: {
-          text: [
-            "Le double de 7 est _____",
-            "La moitié de 14 est _____"
-          ],
-          answers: ["14", "7"],
-          explanation: {
-            steps: [
-              { detail: "Le double de 7 est 14 car 7 × 2 = 14" },
-              { detail: "La moitié de 14 est 7 car 14 ÷ 2 = 7" }
-            ]
-          }
-        },
-        skillsImpact: {
-          'Calcul mental': 20,
-          'Logique': 15
-        }
-      },
-      {
-        id: 'revision_1',
         type: 'revision_sheet',
         content: [
           {
             type: 'section',
-            title: 'Les nombres relatifs',
-            content: 'Un nombre relatif est un nombre qui peut être positif, négatif ou nul. Il est utilisé pour indiquer une direction ou une différence de quantité. Exemple : -3, 5, -10, 0'
-          },
-          {
-            type: 'subsection',
-            title: 'Les nombres relatifs en détail',
-            content: 'Les nombres relatifs sont utilisés pour représenter des quantités ou des points sur une droite graduée. Le signe indique la direction et la valeur absolue indique la distance par rapport à zéro.'
+            title: 'Définition de la probabilité',
+            content: 'La probabilité d\'un événement est un nombre compris entre 0 et 1 qui mesure la chance que cet événement se produise.'
           },
           {
             type: 'example',
-            title: 'Exemple d\'utilisation',
-            content: 'Si on ajoute -5 à 3, cela donne -2. Cela signifie que l\'on se déplace de 5 unités vers la gauche à partir de 3.'
+            title: 'Exemple',
+            content: 'Si on lance un dé équilibré, la probabilité d\'obtenir un 3 est de 1/6, car il y a 1 chance sur 6 d\'obtenir un 3.'
           },
           {
             type: 'remark',
-            title: 'Remarque importante',
-            content: 'Il est essentiel de bien comprendre la notion de signe dans les nombres relatifs pour réaliser des opérations correctement.'
+            title: 'Remarque',
+            content: 'Si un événement est certain, sa probabilité est 1. Si un événement est impossible, sa probabilité est 0.'
           },
           {
-            "type": "question",
+            type: 'question',
             questions: [
               {
-                "question": "Qu'est-ce qu'un nombre relatif ?",
-                "options": [
-                  { "text": "Un nombre qui peut être positif, négatif ou nul.", "is_correct": true },
-                  { "text": "Un nombre entier uniquement.", "is_correct": false },  
+                question: "Quelle est la somme des probabilités de toutes les issues possibles d'une expérience aléatoire ?",
+                options: [
+                  { text: "1", is_correct: true },
+                  { text: "0", is_correct: false }
                 ],
-                "explanation": {
-                  "steps": [
-                    { "detail": "Un nombre relatif est un nombre qui peut être positif, négatif ou nul." }
-                  ]
-                }
-              },
-              { 
-                "question": "Qu'est-ce qu'un nombre de 3 chiffres ?",
-                "options": [
-                  { "text": "Un nombre qui a 3 chiffres.", "is_correct": true },
-                  { "text": "Un nombre qui a 2 chiffres.", "is_correct": false },  
-                ],
-                "explanation": {
-                  "steps": [
-                    { "detail": "Un nombre de 3 chiffres est un nombre qui a 3 chiffres." }
+                explanation: {
+                  steps: [
+                    { detail: "La somme des probabilités de toutes les issues d\'une expérience est toujours 1." }
                   ]
                 }
               }
@@ -184,47 +144,64 @@ export const learningPaths = [
           }
         ],
         skillsImpact: {
-          'Calcul': 10,
-          'Algèbre': 5
+          'Probabilités': 10,
+          'Logique': 5
         }
       },
       {
-        id: 296,
-        type: 'revision_sheet_video',
-        path_type: 'revision',
-        content: {
-          video: 'http://localhost:8000/manim/video/MobileRevision_259.mp4',
-          className: 'MobileRevision_259',
-          questions: [
-            {
-              "question": "Qu'est-ce qu'un nombre relatif ?",
-              "options": [
-                { "text": "Un nombre qui peut être positif, négatif ou nul.", "is_correct": true },
-                { "text": "Un nombre entier uniquement.", "is_correct": false },  
-              ],
-              "explanation": {
-                "steps": [
-                  { "detail": "Un nombre relatif est un nombre qui peut être positif, négatif ou nul." }
-                ]
-              }
-            },
-            { 
-              "question": "Qu'est-ce qu'un nombre de 3 chiffres ?",
-              "options": [
-                { "text": "Un nombre qui a 3 chiffres.", "is_correct": true },
-                { "text": "Un nombre qui a 2 chiffres.", "is_correct": false },  
-              ],
-              "explanation": {
-                "steps": [
-                  { "detail": "Un nombre de 3 chiffres est un nombre qui a 3 chiffres." }
-                ]
-              }
-            }
-          ]
+        "id": "13",
+        "type": "true_false",
+        "content": {
+          "question": "Lorsqu’on tire une carte d’un jeu de 52 cartes, la probabilité d’obtenir un as est de 1/13.",
+          "correct_answer": true,
+          "explanation": {
+            "steps": [
+              { "detail": "Il y a 4 as dans un jeu de 52 cartes. Donc, la probabilité est 4/52 = 1/13." }
+            ]
+          }
         },
-        skillsImpact: {
-          'Calcul': 5,
-          'Algèbre': 5
+        "skillsImpact": {
+          "Calcul de probabilités": 15,
+          "Analyse de fréquence": 25
+        }
+      },
+      {
+        "id": "14",
+        "type": "fill_in_the_blank",
+        "content": {
+          "text": ["On lance une pièce équilibrée. La probabilité d’obtenir face est _____."],
+          "answers": ["1/2"],
+          "explanation": {
+            "steps": [
+              { "detail": "Une pièce a deux faces : pile et face. Chaque issue a une probabilité de 1/2." }
+            ]
+          }
+        },
+        "skillsImpact": {
+          "Calcul de probabilités": 20,
+          "Logique": 15
+        }
+      },
+      {
+        "id": "act5",
+        "type": "multiple_choice",
+        "content": {
+          "question": "On tire une boule d’un sac contenant 3 boules rouges, 2 bleues et 5 vertes. Quelle est la probabilité de tirer une boule rouge ?",
+          "options": [
+            { "text": "3/10", "is_correct": true },
+            { "text": "1/5", "is_correct": false },
+            { "text": "3/5", "is_correct": false },
+            { "text": "2/10", "is_correct": false }
+          ],
+          "explanation": {
+            "steps": [
+              { "detail": "Il y a 3 boules rouges sur un total de 10 boules. Donc, P(rouge) = 3/10." }
+            ]
+          }
+        },
+        "skillsImpact": {
+          "Calcul de probabilités": 15,
+          "Analyse de fréquence": 25
         }
       }
     ]

@@ -1,0 +1,33 @@
+{
+  "title": "Quiz Test",
+  "language": "fr",
+  "mainLibrary": "H5P.MultiChoice",
+  "embedTypes": ["div"],
+  "license": "U",
+  "defaultLanguage": "fr",
+  "contentType": "Question",
+  "authors": [{ "name": "SARA", "role": "Author" }],
+  "source": "",
+  "licenseVersion": "",
+  "changes": [],
+  "content": {
+    "params": {
+      "question": "Quelle est la capitale de la France ?",
+      "answers": [
+        { "text": "Paris", "correct": true },
+        { "text": "Londres", "correct": false },
+        { "text": "Berlin", "correct": false }
+      ],
+      "behaviour": {
+        "enableRetry": true,
+        "enableSolutionsButton": true,
+        "type": "single"
+      }
+    },
+    "metadata": {
+      "title": "Quiz Test",
+      "license": "U",
+      "authors": [{ "name": "SARA", "role": "Author" }]
+    }
+  }
+}
